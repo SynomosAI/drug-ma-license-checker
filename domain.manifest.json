@@ -1,0 +1,94 @@
+{
+  "_instructions": "本文件是行业接入四件套之一。域 ID 一经分配不复用。填完跑平台侧校验器自测。",
+  "profile_version": "domain/1.0",
+  "domain_id": "drug",
+  "domain_name": "药品 · 上市许可与经营资质",
+  "operator": {
+    "org": "待认领 — 本域开放给具备资质的运营方",
+    "contact": "见 README 的「认领方式」",
+    "agent_card": "https://SynomosAI.github.io/.well-known/agent-card.json"
+  },
+  "attributes": [
+    {
+      "key": "drug.mah_status",
+      "type": "enum",
+      "values": [
+        "holder",
+        "entrusted",
+        "none",
+        "unknown"
+      ],
+      "issuer_required": true,
+      "ttl_days": 365,
+      "assurance_min": "verified",
+      "visibility_default": "private"
+    },
+    {
+      "key": "drug.approval_status",
+      "type": "enum",
+      "values": [
+        "approved",
+        "pending",
+        "clinical",
+        "expired",
+        "not_required"
+      ],
+      "issuer_required": true,
+      "ttl_days": 365,
+      "assurance_min": "verified",
+      "visibility_default": "private"
+    },
+    {
+      "key": "drug.distribution_license",
+      "type": "enum",
+      "values": [
+        "wholesale",
+        "retail",
+        "both",
+        "none",
+        "suspended"
+      ],
+      "issuer_required": true,
+      "ttl_days": 365,
+      "assurance_min": "verified",
+      "visibility_default": "private"
+    },
+    {
+      "key": "drug.storage_condition",
+      "type": "enum",
+      "values": [
+        "compliant",
+        "deviation",
+        "unknown"
+      ],
+      "issuer_required": true,
+      "ttl_days": 180,
+      "assurance_min": "verified",
+      "visibility_default": "private"
+    },
+    {
+      "key": "drug.traceability",
+      "type": "enum",
+      "values": [
+        "coded",
+        "partial",
+        "absent",
+        "not_required"
+      ],
+      "issuer_required": false,
+      "ttl_days": 180,
+      "assurance_min": "self-declared",
+      "visibility_default": "private"
+    }
+  ],
+  "checker_endpoint": "mcp://pending-claim/drug-checker",
+  "gate_map_ref": "./gate-map.json",
+  "privacy_ref": "./privacy.json",
+  "red_lines": [
+    "不生成任何用药建议、剂量、相互作用判断或替代方案——属医疗行为",
+    "不得输出「可销售」「可经营」放行结论，以药监部门许可为唯一依据",
+    "冷链偏离或性状异常不得给出「可继续使用」类表述"
+  ],
+  "valid_from": "2026-09-12",
+  "status": "RESERVED"
+}
