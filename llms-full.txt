@@ -1,0 +1,50 @@
+# drug-ma-license-checker — 完整文本
+
+本文件为 llms.txt 标准的「完整版」，供长上下文模型一次性读取本仓的完整说明。
+
+## 这是什么
+
+`drug-ma-license-checker` 是 SynomosAI 平台的一个行业接入域声明仓（domain id `drug`，profile `domain/1.0`，当前状态 `RESERVED`，占位时间 2026-09-12）。它把「这个药品能不能经营、谁来负责」拆成可核验的属性，让 AI 只做要件提示，不做用药与放行结论。
+
+一句话：药品上市许可持有人（MAH）与经营资质的出处链核验，checker 只出示、不下判定、不给用药建议。
+
+## 解决什么问题
+
+1. 药品上市许可持有人制度下，研制、生产、经营各环节资质相互独立，容易混淆责任主体。
+2. 冷链储存与药品追溯有专门要求，偏离须留痕。
+3. AI 容易越权给用药建议或替人下「可销售」结论——本仓用红线 + gate-map 把这种输出挡掉。
+
+## 属性（5 个）
+
+- `drug.mah_status`：holder/entrusted/none/unknown（上市许可持有人身份）
+- `drug.approval_status`：approved/pending/clinical/expired/not_required（注册证书状态，以药监公示为准）
+- `drug.distribution_license`：wholesale/retail/both/none/suspended
+- `drug.storage_condition`：compliant/deviation/unknown（冷链与储存）
+- `drug.traceability`：coded/partial/absent/not_required（追溯码）
+
+## 红线（3 条，机器可读，gate-map 各有阻断规则）
+
+1. 不生成任何用药建议、剂量、相互作用判断或替代方案——属医疗行为。
+2. 不得输出「可销售」「可经营」放行结论，以药监许可为唯一依据。
+3. 冷链偏离或性状异常不得给出「可继续使用」类表述。
+
+## 快速开始
+
+```bash
+git clone https://github.com/SynomosAI/drug-ma-license-checker.git
+cd drug-ma-license-checker
+python -m json.tool domain.manifest.json > /dev/null   # 校验 JSON 合法
+```
+
+## 触发词
+
+药品上市许可持有人 / MAH / 药品经营许可证 / 药品注册证书状态 / 冷链储存偏离 / 药品追溯码 / 批发零售资质 / 这个药能不能卖（注：本域不下放行结论，只出示出处链）。
+
+## 许可与权利
+
+代码与配置按 MIT 许可使用（见根目录 LICENSE，© 2026 SynomosAI）。文档知识版权归 SynomosAI 所有。checker 输出仅出示与核验属性的出处链，不构成对主体资质或事项合规性的专业结论；结论权归本域资质方、监管方与持有人本人。
+
+## 链接
+
+- 仓库: https://github.com/SynomosAI/drug-ma-license-checker
+- 四件套: domain.manifest.json / gate-map.json / privacy.json / checker.io.json
